@@ -16,32 +16,21 @@ import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.model.Recipe;
 
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.IntConsumer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**
- * A placeholder fragment containing a simple view.
- */
-public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesAdapterOnClickHandler {
+public class IngredientsFragment extends Fragment {
 
-    @BindView(R.id.recipes_list_rv)
-    RecyclerView mRecipesRecyclerView;
+    @BindView(R.id.single_recipe_rv)
+    RecyclerView mSingleRecipeRecyclerView;
 
     private Unbinder mUnbinder;
     private RecipesViewModel mViewModel;
-    private RecipesAdapter mRecipesAdapter;
+    private SingleRecipeAdapter mSingleRecipeAdapter;
 
-    OnRecipeClickListener mCallback;
-
-    public interface OnRecipeClickListener {
-        void onRecipeSelected(int position);
-    }
-
-    public RecipesFragment() {
+    public IngredientsFragment() {
     }
 
     @Override
@@ -53,16 +42,15 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recipes, container, false);
+        View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        mRecipesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecipesAdapter = new RecipesAdapter(this);
-        mRecipesRecyclerView.setAdapter(mRecipesAdapter);
+        mSingleRecipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mSingleRecipeAdapter = new SingleRecipeAdapter();
+        mSingleRecipeRecyclerView.setAdapter(mSingleRecipeAdapter);
 
-        mViewModel = ViewModelProviders.of(this).get(RecipesViewModel.class);
-        mViewModel.getRecipes().observe(this, recipes -> {
-            mRecipesAdapter.setRecipes(recipes);
+        mViewModel.getIngredients().observe(this, recipe -> {
+            mSingleRecipeAdapter.setIngredients(recipe.getIngredients());
         });
 
         return view;
@@ -72,10 +60,5 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
-    }
-
-    @Override
-    public void onClick(Recipe recipe) {
-        mViewModel.selectRecipe(recipe);
     }
 }

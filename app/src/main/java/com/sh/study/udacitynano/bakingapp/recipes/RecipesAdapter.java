@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.view.View.OnClickListener;
 
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.model.Recipe;
@@ -52,11 +53,20 @@ class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterV
         else return mRecipes.size();
     }
 
-    public class RecipesAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class RecipesAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
         @BindView(R.id.recipe_name) TextView mRecipeName;
         public RecipesAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            Recipe recipe = mRecipes.get(adapterPosition);
+//            mPosition = adapterPosition;
+            mClickHandler.onClick(recipe);
         }
     }
 }
