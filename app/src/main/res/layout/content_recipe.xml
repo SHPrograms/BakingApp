@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -13,19 +13,43 @@
         android:layout_height="wrap_content"
         app:cardBackgroundColor="#95a7bf"
         app:cardCornerRadius="5dp"
-        app:cardUseCompatPadding="true"
-        app:cardElevation="1dp">
+        app:cardElevation="1dp"
+        app:cardUseCompatPadding="true">
 
-            <TextView
-                android:id="@+id/recipe_name"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+        <!--
+        <TextView
+            android:id="@+id/recipe_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            tools:text="Test" />
+-->
+        <TableRow android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <Button
+                android:id="@+id/recipe_steps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:textColor="@android:color/white"
+                android:text="Steps"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:background="@color/cardview_shadow_end_color"/>
+
+            <Button
+                android:id="@+id/recipe_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold"
-                tools:text="Test" />
+                android:background="@color/cardview_shadow_end_color"/>
+
+        </TableRow>
+
     </android.support.v7.widget.CardView>
 </LinearLayout>

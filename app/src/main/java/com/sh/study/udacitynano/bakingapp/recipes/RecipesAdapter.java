@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
@@ -17,21 +18,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterViewHolder> {
-    private List<Recipe> mRecipes;
+    private List<Recipe> recipes;
 
     public void setRecipes(List<Recipe> recipes) {
-        this.mRecipes = recipes;
+        this.recipes = recipes;
         this.notifyDataSetChanged();
     }
 
-    final private RecipesAdapterOnClickHandler mClickHandler;
+    final private RecipesAdapterOnClickHandler clickHandler;
 
     public interface RecipesAdapterOnClickHandler {
         void onClick(Recipe recipe);
     }
 
     public RecipesAdapter(RecipesAdapterOnClickHandler mClickHandler) {
-        this.mClickHandler = mClickHandler;
+        this.clickHandler = mClickHandler;
     }
 
     @NonNull
@@ -44,29 +45,32 @@ class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterV
 
     @Override
     public void onBindViewHolder(@NonNull RecipesAdapterViewHolder holder, int position) {
-        holder.mRecipeName.setText(String.valueOf(mRecipes.get(position).getName()));
+        holder.recipeName.setText(String.valueOf(recipes.get(position).getName()));
     }
 
     @Override
     public int getItemCount() {
-        if (mRecipes == null) return 0;
-        else return mRecipes.size();
+        if (recipes == null) return 0;
+        else return recipes.size();
     }
 
     public class RecipesAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
-        @BindView(R.id.recipe_name) TextView mRecipeName;
+        @BindView(R.id.recipe_name)
+        Button recipeName;
+
         public RecipesAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
+            recipeName.setOnClickListener(this);
+            //itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            Recipe recipe = mRecipes.get(adapterPosition);
+            Recipe recipe = recipes.get(adapterPosition);
 //            mPosition = adapterPosition;
-            mClickHandler.onClick(recipe);
+            clickHandler.onClick(recipe);
         }
     }
 }

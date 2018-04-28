@@ -10,47 +10,46 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.sh.study.udacitynano.bakingapp.R;
-import com.sh.study.udacitynano.bakingapp.model.Recipe;
-
-import java.util.List;
+import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class IngredientsFragment extends Fragment {
+    @BindView(R.id.single_recipe_rv) RecyclerView singleRecipeRecyclerView;
 
-    @BindView(R.id.single_recipe_rv)
-    RecyclerView mSingleRecipeRecyclerView;
-
-    private Unbinder mUnbinder;
-    private RecipesViewModel mViewModel;
-    private SingleRecipeAdapter mSingleRecipeAdapter;
+    private static final String CLASS_NAME = "IngredientsFragment";
+    private Unbinder unbinder;
+    private RecipesViewModel recipesViewModel;
+    private SingleRecipeAdapter singleRecipeAdapter;
 
     public IngredientsFragment() {
+        SHDebug.debugTag(CLASS_NAME, "constructor");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = ViewModelProviders.of(getActivity()).get(RecipesViewModel.class);
+        SHDebug.debugTag(CLASS_NAME, "onCreate");
+        recipesViewModel = ViewModelProviders.of(getActivity()).get(RecipesViewModel.class);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        SHDebug.debugTag(CLASS_NAME, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
-        mUnbinder = ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
 
-        mSingleRecipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mSingleRecipeAdapter = new SingleRecipeAdapter();
-        mSingleRecipeRecyclerView.setAdapter(mSingleRecipeAdapter);
+        singleRecipeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        singleRecipeAdapter = new SingleRecipeAdapter();
+        singleRecipeRecyclerView.setAdapter(singleRecipeAdapter);
 
-        mViewModel.getIngredients().observe(this, recipe -> {
-            mSingleRecipeAdapter.setIngredients(recipe.getIngredients());
+        recipesViewModel.getRecipe().observe(this, recipe -> {
+            singleRecipeAdapter.setIngredients(recipe.getIngredients());
         });
 
         return view;
@@ -59,6 +58,7 @@ public class IngredientsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
+        SHDebug.debugTag(CLASS_NAME, "onDestroyView");
+        unbinder.unbind();
     }
 }

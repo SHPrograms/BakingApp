@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.model.Ingredient;
-import com.sh.study.udacitynano.bakingapp.model.Recipe;
 
 import java.util.List;
 
@@ -17,10 +16,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 class SingleRecipeAdapter extends RecyclerView.Adapter<SingleRecipeAdapter.SingleRecipeAdapterViewHolder> {
-    private List<Ingredient> mIngredients;
+    private List<Ingredient> ingredients;
 
     public void setIngredients(List<Ingredient> ingredients) {
-        this.mIngredients = ingredients;
+        this.ingredients = ingredients;
         this.notifyDataSetChanged();
     }
 
@@ -34,18 +33,18 @@ class SingleRecipeAdapter extends RecyclerView.Adapter<SingleRecipeAdapter.Singl
 
     @Override
     public void onBindViewHolder(@NonNull SingleRecipeAdapterViewHolder holder, int position) {
-        holder.mIngredientName.setText(String.valueOf(mIngredients.get(position).getIngredient()));
+        holder.ingredientName.setText(String.valueOf(ingredients.get(position).getIngredient()));
     }
 
     @Override
     public int getItemCount() {
-        if (mIngredients == null) return 0;
-        else return mIngredients.size();
+        if (ingredients == null) return 0;
+        else return ingredients.size();
     }
 
     public class SingleRecipeAdapterViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.recipe_details_name)
-        TextView mIngredientName;
+        @BindView(R.id.recipe_details_name) TextView ingredientName;
+
         public SingleRecipeAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
