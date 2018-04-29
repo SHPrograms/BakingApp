@@ -39,8 +39,8 @@ public class StepsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         SHDebug.debugTag(CLASS_NAME, "onCreate");
 //        recipesViewModel = ViewModelProviders.of(getActivity()).get(RecipesViewModel.class);
-        if (getArguments().containsKey("StepsForSingleRecipe")) {
-            steps = getArguments().getParcelable("StepsForSingleRecipe");
+        if (getArguments().containsKey("sfsr")) {
+            steps = getArguments().getParcelableArrayList("sfsr");
         }
 
     }
@@ -55,6 +55,7 @@ public class StepsFragment extends Fragment {
 
 
         stepsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        assert stepsRecyclerView != null;
         stepsAdapter = new StepsAdapter();
         stepsRecyclerView.setAdapter(stepsAdapter);
         stepsAdapter.setSteps(steps);

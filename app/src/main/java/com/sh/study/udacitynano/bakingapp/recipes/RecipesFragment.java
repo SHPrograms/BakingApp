@@ -18,6 +18,9 @@ import android.widget.ImageButton;
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
 import com.sh.study.udacitynano.bakingapp.model.Recipe;
+import com.sh.study.udacitynano.bakingapp.model.Step;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,11 +86,13 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
 //        recipesViewModel.setRecipe(recipe);
         if (v instanceof Button) {
             // List of ingredients
-
+            recipesViewModel.setRecipe(recipe);
         } else if (v instanceof ImageButton) {
             // Steps
             Intent intent = new Intent(this.getContext(), StepsActivity.class);
-            intent.putExtra("StepsForSingleRecipe", recipe.getSteps().toArray());
+            ArrayList<Step> listOfsteps = new ArrayList<>(recipe.getSteps().size());
+            listOfsteps.addAll(recipe.getSteps());
+            intent.putParcelableArrayListExtra("sfsr",  listOfsteps);
             startActivity(intent);
         }
     }

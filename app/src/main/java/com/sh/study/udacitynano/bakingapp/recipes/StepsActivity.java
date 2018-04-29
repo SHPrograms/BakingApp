@@ -19,11 +19,12 @@ public class StepsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
 
-
         if (savedInstanceState == null) {
+
             Bundle arguments = new Bundle();
-            arguments.putParcelable("StepsForSingleRecipe",
-                    getIntent().getParcelableExtra("StepsForSingleRecipe"));
+            arguments.putParcelableArrayList("sfsr",
+                    getIntent().getParcelableArrayListExtra("sfsr")
+            );
 
             StepsFragment fragment = new StepsFragment();
             fragment.setArguments(arguments);

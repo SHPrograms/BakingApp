@@ -11,15 +11,16 @@ import android.widget.TextView;
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.model.Step;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepAdapterViewHolder> {
-    private List<Step> steps;
+    private ArrayList<Step> steps;
 
-    public void setSteps(List<Step> steps) {
+    public void setSteps(ArrayList<Step> steps) {
         this.steps = steps;
         this.notifyDataSetChanged();
     }
@@ -28,7 +29,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepAdapterV
     @Override
     public StepAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.content_inredient, parent, false);
+                .inflate(R.layout.content_steps, parent, false);
         return new StepAdapterViewHolder(view);
     }
 
