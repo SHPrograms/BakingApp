@@ -1,10 +1,9 @@
 package com.sh.study.udacitynano.bakingapp.recipes;
 
-import android.arch.lifecycle.ViewModelProviders;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,20 +12,25 @@ import android.view.ViewGroup;
 
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
+import com.sh.study.udacitynano.bakingapp.model.Step;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class IngredientsFragment extends Fragment {
-    @BindView(R.id.ingredients_rv) RecyclerView ingredientsRecyclerView;
+public class StepsFragment extends Fragment {
+    @BindView(R.id.steps_rv)
+    RecyclerView stepsRecyclerView;
 
     private static final String CLASS_NAME = "IngredientsFragment";
     private Unbinder unbinder;
-    private RecipesViewModel recipesViewModel;
-    private IngredientsAdapter ingredientsAdapter;
+    //    private RecipesViewModel recipesViewModel;
+    private StepsAdapter stepsAdapter;
+    private ArrayList<Step> steps;
 
-    public IngredientsFragment() {
+    public StepsFragment() {
         SHDebug.debugTag(CLASS_NAME, "constructor");
     }
 
@@ -34,23 +38,32 @@ public class IngredientsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SHDebug.debugTag(CLASS_NAME, "onCreate");
-        recipesViewModel = ViewModelProviders.of(getActivity()).get(RecipesViewModel.class);
+//        recipesViewModel = ViewModelProviders.of(getActivity()).get(RecipesViewModel.class);
+        if (getArguments().containsKey("StepsForSingleRecipe")) {
+            steps = getArguments().getParcelable("StepsForSingleRecipe");
+        }
+
     }
 
+    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         SHDebug.debugTag(CLASS_NAME, "onCreateView");
-        View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
+        View view = inflater.inflate(R.layout.fragment_steps, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ingredientsAdapter = new IngredientsAdapter();
-        ingredientsRecyclerView.setAdapter(ingredientsAdapter);
 
-        recipesViewModel.getRecipe().observe(this, recipe -> {
-            ingredientsAdapter.setIngredients(recipe.getIngredients());
+        stepsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        stepsAdapter = new StepsAdapter();
+        stepsRecyclerView.setAdapter(stepsAdapter);
+        stepsAdapter.setSteps(steps);
+
+/*
+        recipesViewModel.getRecipe().observe(this, steps -> {
+            stepsAdapter.setSteps(steps.getSteps());
         });
+*/
 
         return view;
     }

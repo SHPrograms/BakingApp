@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.view.View.OnClickListener;
 
 import com.sh.study.udacitynano.bakingapp.R;
@@ -28,7 +28,7 @@ class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterV
     final private RecipesAdapterOnClickHandler clickHandler;
 
     public interface RecipesAdapterOnClickHandler {
-        void onClick(Recipe recipe);
+        void onClick(Recipe recipe, View v);
     }
 
     public RecipesAdapter(RecipesAdapterOnClickHandler mClickHandler) {
@@ -58,19 +58,21 @@ class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterV
         @BindView(R.id.recipe_name)
         Button recipeName;
 
+        @BindView(R.id.recipe_steps)
+        ImageButton recipeSteps;
+
         public RecipesAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             recipeName.setOnClickListener(this);
-            //itemView.setOnClickListener(this);
+            recipeSteps.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Recipe recipe = recipes.get(adapterPosition);
-//            mPosition = adapterPosition;
-            clickHandler.onClick(recipe);
+            clickHandler.onClick(recipe, v);
         }
     }
 }

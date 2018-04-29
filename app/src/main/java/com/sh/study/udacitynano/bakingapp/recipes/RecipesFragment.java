@@ -1,6 +1,8 @@
 package com.sh.study.udacitynano.bakingapp.recipes;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
@@ -74,8 +78,17 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
     }
 
     @Override
-    public void onClick(Recipe recipe) {
+    public void onClick(Recipe recipe, View v) {
         SHDebug.debugTag(CLASS_NAME, "onClick");
-        recipesViewModel.setRecipe(recipe);
+//        recipesViewModel.setRecipe(recipe);
+        if (v instanceof Button) {
+            // List of ingredients
+
+        } else if (v instanceof ImageButton) {
+            // Steps
+            Intent intent = new Intent(this.getContext(), StepsActivity.class);
+            intent.putExtra("StepsForSingleRecipe", recipe.getSteps().toArray());
+            startActivity(intent);
+        }
     }
 }

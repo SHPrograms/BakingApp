@@ -12,43 +12,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="#95a7bf"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="3dp"
         app:cardElevation="1dp"
         app:cardUseCompatPadding="true">
 
-        <!--
-        <TextView
-            android:id="@+id/recipe_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            tools:text="Test" />
--->
-        <TableRow android:layout_height="wrap_content"
-            android:layout_width="match_parent">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <Button
+            <ImageButton
                 android:id="@+id/recipe_steps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Steps"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:background="@color/cardview_shadow_end_color"/>
+                android:background="@android:drawable/ic_menu_more" />
 
             <Button
                 android:id="@+id/recipe_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/cardview_shadow_end_color"
                 android:text="Name"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold"
-                android:background="@color/cardview_shadow_end_color"/>
-
+                android:textColor="@color/cardview_dark_background"
+                android:textStyle="bold" />
         </TableRow>
 
     </android.support.v7.widget.CardView>

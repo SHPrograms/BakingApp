@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".recipes.RecipesFragment"
-    tools:showIn="@layout/activity_recipes">
+    tools:context=".recipes.StepsFragment"
+    tools:showIn="@layout/activity_steps">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/ingredients_rv"
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/steps_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>

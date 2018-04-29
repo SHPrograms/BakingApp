@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
 
-<!--   <activity android:name=".detailrecipe.DetailRecipeActivity" />  -->
+   <activity android:name=".recipes.StepsActivity" />
 
     </application>
 </manifest>

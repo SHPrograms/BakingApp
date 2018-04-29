@@ -24,7 +24,7 @@
                 android:layout_gravity="center"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:textColor="@android:color/white"
+                android:textColor="@color/cardview_dark_background"
                 tools:text="Test" />
     </android.support.v7.widget.CardView>
 </LinearLayout>

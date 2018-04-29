@@ -15,7 +15,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class SingleRecipeAdapter extends RecyclerView.Adapter<SingleRecipeAdapter.SingleRecipeAdapterViewHolder> {
+class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientAdapterViewHolder> {
     private List<Ingredient> ingredients;
 
     public void setIngredients(List<Ingredient> ingredients) {
@@ -25,14 +25,14 @@ class SingleRecipeAdapter extends RecyclerView.Adapter<SingleRecipeAdapter.Singl
 
     @NonNull
     @Override
-    public SingleRecipeAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public IngredientAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.content_recipe_details, parent, false);
-        return new SingleRecipeAdapterViewHolder(view);
+                .inflate(R.layout.content_inredient, parent, false);
+        return new IngredientAdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SingleRecipeAdapterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull IngredientAdapterViewHolder holder, int position) {
         holder.ingredientName.setText(String.valueOf(ingredients.get(position).getIngredient()));
     }
 
@@ -42,10 +42,11 @@ class SingleRecipeAdapter extends RecyclerView.Adapter<SingleRecipeAdapter.Singl
         else return ingredients.size();
     }
 
-    public class SingleRecipeAdapterViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.recipe_details_name) TextView ingredientName;
+    public class IngredientAdapterViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.recipe_details_name)
+        TextView ingredientName;
 
-        public SingleRecipeAdapterViewHolder(View itemView) {
+        public IngredientAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
