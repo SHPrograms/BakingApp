@@ -1,5 +1,6 @@
 package com.sh.study.udacitynano.bakingapp.recipes;
 
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
@@ -30,17 +32,18 @@ import butterknife.Unbinder;
  * A placeholder fragment containing a simple view.
  */
 public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesAdapterOnClickHandler {
-    @BindView(R.id.recipes_list_rv) RecyclerView recipesRecyclerView;
+    @BindView(R.id.recipes_list_rv)
+    RecyclerView recipesRecyclerView;
 
     private static final String CLASS_NAME = "RecipesFragment";
     private Unbinder unbinder;
     private RecipesViewModel recipesViewModel;
     private RecipesAdapter recipesAdapter;
 
-    OnRecipeClickListener callback;
+    OnRecipeClickListener recipeClickListener;
 
     public interface OnRecipeClickListener {
-        void onRecipeSelected(int position);
+        void onRecipeSelected(Recipe recipe);
     }
 
     public RecipesFragment() {
@@ -48,10 +51,27 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            recipeClickListener = (OnRecipeClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnRecipeClickListener");
+        }
+
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SHDebug.debugTag(CLASS_NAME, "onCreate");
-        recipesViewModel = ViewModelProviders.of(getActivity()).get(RecipesViewModel.class);
+        try {
+            recipesViewModel = ViewModelProviders.of(getActivity()).get(RecipesViewModel.class);
+        } catch (NullPointerException e) {
+            throw new NullPointerException();
+        }
+
     }
 
     @Override
@@ -66,9 +86,7 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
         recipesRecyclerView.setAdapter(recipesAdapter);
 
 //        recipesViewModel = ViewModelProviders.of(this).get(RecipesViewModel.class);
-        recipesViewModel.getRecipes().observe(this, recipes -> {
-            recipesAdapter.setRecipes(recipes);
-        });
+        recipesViewModel.getRecipes().observe(this, recipes -> recipesAdapter.setRecipes(recipes));
 
         return view;
     }
@@ -87,12 +105,13 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
         if (v instanceof Button) {
             // List of ingredients
             recipesViewModel.setRecipe(recipe);
+            recipeClickListener.onRecipeSelected(recipe);
         } else if (v instanceof ImageButton) {
             // Steps
             Intent intent = new Intent(this.getContext(), StepsActivity.class);
             ArrayList<Step> listOfsteps = new ArrayList<>(recipe.getSteps().size());
             listOfsteps.addAll(recipe.getSteps());
-            intent.putParcelableArrayListExtra("sfsr",  listOfsteps);
+            intent.putParcelableArrayListExtra("sfsr", listOfsteps);
             startActivity(intent);
         }
     }

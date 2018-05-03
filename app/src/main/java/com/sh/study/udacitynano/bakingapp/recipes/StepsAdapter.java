@@ -12,7 +12,6 @@ import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.model.Step;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +34,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepAdapterV
 
     @Override
     public void onBindViewHolder(@NonNull StepAdapterViewHolder holder, int position) {
-        holder.stepName.setText("Step " + String.valueOf(steps.get(position).getId()));
+        holder.stepName.setText(holder.itemView.getResources().getString(R.string.steps_number, steps.get(position).getId()));
         holder.stepDescriptionShort.setText(String.valueOf(steps.get(position).getShortDescription()));
         holder.stepDescriptionLong.setText(String.valueOf(steps.get(position).getDescription()));
 

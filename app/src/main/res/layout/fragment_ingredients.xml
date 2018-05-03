@@ -7,8 +7,44 @@
     tools:context=".recipes.RecipesFragment"
     tools:showIn="@layout/activity_recipes">
 
+    <TextView
+        android:id="@+id/ingredients_servings_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/barrier_ingredients"
+        app:layout_constraintEnd_toStartOf="@+id/ingredients_recipe_iv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Recipe for 8 servings" />
+
+    <ImageView
+        android:id="@+id/ingredients_recipe_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/recipe_iv_contentDescription"
+        app:layout_constraintBottom_toTopOf="@+id/barrier_ingredients"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@drawable/placeholder_50x50" />
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier_ingredients"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="ingredients_servings_tv, ingredients_recipe_iv"
+        app:layout_constraintBottom_toTopOf="@+id/ingredients_rv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ingredients_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/barrier_ingredients" />
+
 </android.support.constraint.ConstraintLayout>

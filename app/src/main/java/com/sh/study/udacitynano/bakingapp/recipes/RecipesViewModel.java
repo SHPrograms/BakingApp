@@ -3,7 +3,6 @@ package com.sh.study.udacitynano.bakingapp.recipes;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;

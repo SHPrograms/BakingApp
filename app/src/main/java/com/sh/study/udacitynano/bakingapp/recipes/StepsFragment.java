@@ -26,8 +26,6 @@ public class StepsFragment extends Fragment {
 
     private static final String CLASS_NAME = "IngredientsFragment";
     private Unbinder unbinder;
-    //    private RecipesViewModel recipesViewModel;
-    private StepsAdapter stepsAdapter;
     private ArrayList<Step> steps;
 
     public StepsFragment() {
@@ -39,8 +37,12 @@ public class StepsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         SHDebug.debugTag(CLASS_NAME, "onCreate");
 //        recipesViewModel = ViewModelProviders.of(getActivity()).get(RecipesViewModel.class);
-        if (getArguments().containsKey("sfsr")) {
-            steps = getArguments().getParcelableArrayList("sfsr");
+        try {
+            if (getArguments().containsKey("sfsr")) {
+                steps = getArguments().getParcelableArrayList("sfsr");
+            }
+        } catch (NullPointerException e) {
+            throw new NullPointerException();
         }
 
     }
@@ -56,7 +58,7 @@ public class StepsFragment extends Fragment {
 
         stepsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         assert stepsRecyclerView != null;
-        stepsAdapter = new StepsAdapter();
+        StepsAdapter stepsAdapter = new StepsAdapter();
         stepsRecyclerView.setAdapter(stepsAdapter);
         stepsAdapter.setSteps(steps);
 

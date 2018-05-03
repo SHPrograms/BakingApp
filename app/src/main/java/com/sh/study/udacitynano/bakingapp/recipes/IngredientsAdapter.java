@@ -33,6 +33,7 @@ class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.Ingredi
 
     @Override
     public void onBindViewHolder(@NonNull IngredientAdapterViewHolder holder, int position) {
+        //TODO: Add Quantity and measure to ingredient name
         holder.ingredientName.setText(String.valueOf(ingredients.get(position).getIngredient()));
     }
 
@@ -46,7 +47,7 @@ class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.Ingredi
         @BindView(R.id.recipe_details_name)
         TextView ingredientName;
 
-        public IngredientAdapterViewHolder(View itemView) {
+        IngredientAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
