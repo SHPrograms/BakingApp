@@ -2,6 +2,13 @@ package com.sh.study.udacitynano.bakingapp.constants;
 
 import android.util.Log;
 
+/**
+ * Testing and information purposes
+ *
+ * @author Sławomir Hagiel
+ * @version 1.0
+ * @since 2018-04-22
+ */
 public final class SHDebug {
     private SHDebug() {
         throw new AssertionError();

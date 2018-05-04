@@ -15,6 +15,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Adapter used to show list of ingredients in Recycler View in Recipe activity.
+ *
+ * @author Sławomir Hagiel
+ * @version 1.0
+ * @since 2018-04-27
+ */
 class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientAdapterViewHolder> {
     private List<Ingredient> ingredients;
 

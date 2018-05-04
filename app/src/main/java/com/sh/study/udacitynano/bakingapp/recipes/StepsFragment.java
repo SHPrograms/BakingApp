@@ -20,7 +20,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+/**
+ * Fragment used to show list of steps in Recycler View.
+ *
+ * @author Sławomir Hagiel
+ * @version 1.0
+ * @since 2018-04-29
+ */
 public class StepsFragment extends Fragment {
+    @SuppressWarnings("WeakerAccess")
     @BindView(R.id.steps_rv)
     RecyclerView stepsRecyclerView;
 
@@ -44,7 +52,6 @@ public class StepsFragment extends Fragment {
         } catch (NullPointerException e) {
             throw new NullPointerException();
         }
-
     }
 
     @Nullable

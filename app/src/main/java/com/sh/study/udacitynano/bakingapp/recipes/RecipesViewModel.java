@@ -17,28 +17,47 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Fetching data from JSON
+ *
+ * @author Sławomir Hagiel
+ * @version 1.0
+ * @since 2018-04-22
+ */
 class RecipesViewModel extends ViewModel {
     private static final String CLASS_NAME = "RecipesViewModel";
     private static final String RECIPES_BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/";
 
     private final MutableLiveData<List<Recipe>> recipes = new MutableLiveData<>();
-    private MutableLiveData<Recipe> selectedRecipe = new MutableLiveData<>();
+    private final MutableLiveData<Recipe> selectedRecipe = new MutableLiveData<>();
 
     public RecipesViewModel() {
         SHDebug.debugTag(CLASS_NAME, "constructor");
         setRecipes();
     }
 
+    /**
+     * Set chosen recipe
+     * @param recipe {@link Recipe}
+     */
     public void setRecipe(Recipe recipe) {
         SHDebug.debugTag(CLASS_NAME, "setRecipe");
         selectedRecipe.setValue(recipe);
     }
 
+    /**
+     * Get chosen recipe
+     * @return {@link Recipe}
+     */
     public LiveData<Recipe> getRecipe() {
         SHDebug.debugTag(CLASS_NAME, "getRecipe");
         return selectedRecipe;
     }
 
+    /**
+     * Get all recipes. Fetch if not exist.
+     * @return {@link List} of {@link Recipe}
+     */
     public LiveData<List<Recipe>> getRecipes() {
         SHDebug.debugTag(CLASS_NAME, "getRecipes");
         if (recipes != null) return recipes;

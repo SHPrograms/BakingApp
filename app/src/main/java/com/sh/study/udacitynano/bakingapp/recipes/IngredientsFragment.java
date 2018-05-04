@@ -21,13 +21,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+/**
+ * Fragment used to show list of ingredients in Recipes Activity.
+ *
+ * @author Sławomir Hagiel
+ * @version 1.0
+ * @since 2018-04-27
+ */
 public class IngredientsFragment extends Fragment {
+    @SuppressWarnings("WeakerAccess")
     @BindView(R.id.ingredients_rv)
     RecyclerView ingredientsRecyclerView;
 
+    @SuppressWarnings("WeakerAccess")
     @BindView(R.id.ingredients_servings_tv)
     TextView ingredientsServingsTextView;
 
+    @SuppressWarnings("WeakerAccess")
     @BindView(R.id.ingredients_recipe_iv)
     ImageView ingredientsRecipeImageView;
 
@@ -49,7 +59,6 @@ public class IngredientsFragment extends Fragment {
         } catch (NullPointerException e) {
             throw new NullPointerException();
         }
-
     }
 
     @Override

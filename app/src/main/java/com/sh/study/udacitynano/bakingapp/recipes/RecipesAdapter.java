@@ -17,6 +17,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Adapter used to show list of recipes in Recycler View in Recipe activity.
+ *
+ * @author Sławomir Hagiel
+ * @version 1.0
+ * @since 2018-04-22
+ */
 class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterViewHolder> {
     private List<Recipe> recipes;
 
@@ -27,6 +34,9 @@ class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterV
 
     final private RecipesAdapterOnClickHandler clickHandler;
 
+    /**
+     * Single recipe was clicked
+     */
     public interface RecipesAdapterOnClickHandler {
         void onClick(Recipe recipe, View v);
     }
@@ -61,17 +71,26 @@ class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterV
         @BindView(R.id.recipe_steps)
         ImageButton recipeSteps;
 
-        public RecipesAdapterViewHolder(View itemView) {
+        RecipesAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             recipeName.setOnClickListener(this);
             recipeSteps.setOnClickListener(this);
         }
 
+        /**
+         * Single recipe was clicked so we need:
+         * - show ingredients or steps for recipe send as parameter
+
+         * @see OnClickListener
+         * @param v clicked view
+         */
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Recipe recipe = recipes.get(adapterPosition);
+            // TODO: change second parameter to static int value ingredient or step and...
+            // implement situation when both are visible (in the future for tablets)
             clickHandler.onClick(recipe, v);
         }
     }

@@ -1,6 +1,5 @@
 package com.sh.study.udacitynano.bakingapp.recipes;
 
-import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
@@ -29,9 +27,14 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Fragment used to show list of recipes in Recycler View in Recipe activity.
+ *
+ * @author Sławomir Hagiel
+ * @version 1.0
+ * @since 2018-04-22
  */
 public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesAdapterOnClickHandler {
+    @SuppressWarnings("WeakerAccess")
     @BindView(R.id.recipes_list_rv)
     RecyclerView recipesRecyclerView;
 
@@ -40,8 +43,12 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
     private RecipesViewModel recipesViewModel;
     private RecipesAdapter recipesAdapter;
 
-    OnRecipeClickListener recipeClickListener;
+    private OnRecipeClickListener recipeClickListener;
 
+    /**
+     * Single recipe was clicked
+     */
+    // TODO: Can I use single listener from RecipesAdapter and implement it in RecipesActivity?
     public interface OnRecipeClickListener {
         void onRecipeSelected(Recipe recipe);
     }
@@ -59,7 +66,6 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
             throw new ClassCastException(context.toString()
                     + " must implement OnRecipeClickListener");
         }
-
     }
 
     @Override
@@ -98,6 +104,14 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
         unbinder.unbind();
     }
 
+    /**
+     * Single recipe was clicked.
+     *
+     * Implement {@link RecipesAdapter.RecipesAdapterOnClickHandler}
+     *
+     * @param recipe Chosen {@link Recipe}
+     * @param v Clicked view
+     */
     @Override
     public void onClick(Recipe recipe, View v) {
         SHDebug.debugTag(CLASS_NAME, "onClick");

@@ -16,6 +16,13 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Adapter used to show list of steps in Recycler View.
+ *
+ * @author Sławomir Hagiel
+ * @version 1.0
+ * @since 2018-04-29
+ */
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepAdapterViewHolder> {
     private ArrayList<Step> steps;
 
@@ -70,7 +77,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepAdapterV
         @BindView(R.id.recipe_step_video_url)
         ImageView stepVideo;
 
-        public StepAdapterViewHolder(View itemView) {
+        StepAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

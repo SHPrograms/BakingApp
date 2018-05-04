@@ -9,6 +9,14 @@ import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
 
 import butterknife.ButterKnife;
 
+/**
+ * Steps activity used to show:
+ * - lists of steps for smartphones
+ *
+ * @author Sławomir Hagiel
+ * @version 1.0
+ * @since 2018-04-29
+ */
 public class StepsActivity extends AppCompatActivity {
     private static final String CLASS_NAME = "StepsActivity";
 

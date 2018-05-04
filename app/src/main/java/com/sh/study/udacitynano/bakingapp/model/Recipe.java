@@ -10,6 +10,15 @@ import android.os.Parcelable.Creator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Single recipe data imported from JSON
+ *
+ *  Generated {@see http://www.jsonschema2pojo.org/}
+ *
+ * @author Sławomir Hagiel
+ * @version 1.0
+ * @since 2018-04-22
+ */
 public class Recipe implements Parcelable {
 
     @SerializedName("id")

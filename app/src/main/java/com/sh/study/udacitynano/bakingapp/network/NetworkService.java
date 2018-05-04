@@ -8,7 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 /**
- * Network calls
+ * Network calls to import JSON data about recipes
  *
  * @author Sławomir Hagiel
  * @version 1.0
