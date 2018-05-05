@@ -82,7 +82,6 @@ class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterV
         private void Clicked(int source) {
             int adapterPosition = getAdapterPosition();
             Recipe recipe = recipes.get(adapterPosition);
-            // TODO: implement situation when both are visible (in the future for tablets)
             if (source == INGREDIENTS) clickHandler.onClickIngedient(recipe);
             else if (source == STEPS) clickHandler.onClickStep(recipe);
         }

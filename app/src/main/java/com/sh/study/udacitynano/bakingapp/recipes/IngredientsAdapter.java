@@ -40,8 +40,9 @@ class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.Ingredi
 
     @Override
     public void onBindViewHolder(@NonNull IngredientAdapterViewHolder holder, int position) {
-        //TODO: Add Quantity and measure to ingredient name
-        holder.ingredientName.setText(String.valueOf(ingredients.get(position).getIngredient()));
+        holder.ingredientName.setText(String.valueOf(ingredients.get(position).getQuantity())
+                + " " + String.valueOf(ingredients.get(position).getMeasure())
+                + "  - " + String.valueOf(ingredients.get(position).getIngredient()));
     }
 
     @Override

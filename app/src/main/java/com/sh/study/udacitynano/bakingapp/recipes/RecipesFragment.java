@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.sh.study.udacitynano.bakingapp.R;
+import com.sh.study.udacitynano.bakingapp.constants.Constants;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
 import com.sh.study.udacitynano.bakingapp.model.Recipe;
 import com.sh.study.udacitynano.bakingapp.model.Step;
@@ -133,7 +134,8 @@ public class RecipesFragment extends Fragment implements RecipesInterface {
         Intent intent = new Intent(this.getContext(), StepsActivity.class);
         ArrayList<Step> listOfsteps = new ArrayList<>(recipe.getSteps().size());
         listOfsteps.addAll(recipe.getSteps());
-        intent.putParcelableArrayListExtra("sfsr", listOfsteps);
+        intent.putParcelableArrayListExtra(Constants.RECIPE_STEPS, listOfsteps);
+        intent.putExtra(Constants.RECIPE_NAME, recipe.getName());
         startActivity(intent);
     }
 }

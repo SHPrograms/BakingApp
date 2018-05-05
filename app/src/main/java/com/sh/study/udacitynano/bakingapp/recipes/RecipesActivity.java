@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.sh.study.udacitynano.bakingapp.R;
+import com.sh.study.udacitynano.bakingapp.constants.Constants;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
 import com.sh.study.udacitynano.bakingapp.model.Recipe;
 
@@ -33,35 +34,43 @@ public class RecipesActivity extends AppCompatActivity implements RecipesInterfa
         setContentView(R.layout.activity_recipes);
         ButterKnife.bind(this);
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
-        if (RecipesPreferences.getRecipePreferences(this) == null) ingredientsLayout.setVisibility(View.GONE);
+        if (RecipesPreferences.getRecipePreferences(this) == null)
+            ingredientsLayout.setVisibility(View.GONE);
+        else this.setTitle(RecipesPreferences.getRecipePreferences(this).getName());
     }
 
-    //TODO: onSavedInstanceState save position of clicked recipe.
+/*
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         SHDebug.debugTag(CLASS_NAME, "onSaveInstanceState:start");
-//        outState.putInt("position", mPosition);
+        outState.putString(Constants.RECIPE_NAME, this.getTitle().toString());
         super.onSaveInstanceState(outState);
-  }
+    }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         SHDebug.debugTag(CLASS_NAME, "onRestoreInstanceState:start");
-//        mPosition = savedInstanceState.getInt("position");
+        this.setTitle(savedInstanceState.getString(Constants.RECIPE_NAME, this.getTitle().toString()));
         super.onRestoreInstanceState(savedInstanceState);
     }
+*/
 
     @Override
     public void onClickIngedient(Recipe recipe) {
         SHDebug.debugTag(CLASS_NAME, "onClickIngedient");
-        if (ingredientsLayout.getVisibility() != View.VISIBLE) ingredientsLayout.setVisibility(View.VISIBLE);
+        if (ingredientsLayout.getVisibility() != View.VISIBLE)
+            ingredientsLayout.setVisibility(View.VISIBLE);
         RecipesPreferences.setRecipePreferences(this, recipe);
+        this.setTitle(recipe.getName());
     }
 
     @Override
     public void onClickStep(Recipe recipe) {
         SHDebug.debugTag(CLASS_NAME, "onClickStep");
-        if (ingredientsLayout.getVisibility() != View.VISIBLE) ingredientsLayout.setVisibility(View.VISIBLE);
+        if (ingredientsLayout.getVisibility() != View.VISIBLE)
+            ingredientsLayout.setVisibility(View.VISIBLE);
         RecipesPreferences.setRecipePreferences(this, recipe);
+        this.setTitle(recipe.getName());
     }
 }

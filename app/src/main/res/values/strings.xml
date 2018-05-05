@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BakingApp</string>
-    <string name="title_activity_recipes">Recipes</string>
-    <string name="welcome_iv">Welcome in BakingApp!</string>
-    <string name="welcome_iv_link">https://photos.icons8.com/healthy-recipe-5a1835b10b7a6a2e4ce10c7d</string>
-    <string name="menu_item_silent_mode">Silent mode</string>
+    <string name="app_name">Baking App</string>
     <string name="recipe_iv_contentDescription">Recipe Image</string>
     <string name="ingredients_servings_tv_caption">Recipe for %1$d servings</string>
     <string name="steps_number">Step %1$d</string>
-    <string name="title_activity_recipe">Steps</string>
 </resources>

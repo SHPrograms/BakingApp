@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sh.study.udacitynano.bakingapp.R;
+import com.sh.study.udacitynano.bakingapp.constants.Constants;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
 import com.sh.study.udacitynano.bakingapp.model.Step;
 
@@ -46,8 +47,8 @@ public class StepsFragment extends Fragment {
         SHDebug.debugTag(CLASS_NAME, "onCreate");
 //        recipesViewModel = ViewModelProviders.of(getActivity()).get(RecipesViewModel.class);
         try {
-            if (getArguments().containsKey("sfsr")) {
-                steps = getArguments().getParcelableArrayList("sfsr");
+            if (getArguments().containsKey(Constants.RECIPE_STEPS)) {
+                steps = getArguments().getParcelableArrayList(Constants.RECIPE_STEPS);
             }
         } catch (NullPointerException e) {
             throw new NullPointerException();

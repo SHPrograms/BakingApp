@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.sh.study.udacitynano.bakingapp.R;
+import com.sh.study.udacitynano.bakingapp.constants.Constants;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
 
 import butterknife.ButterKnife;
@@ -27,11 +28,13 @@ public class StepsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
 
+        this.setTitle(RecipesPreferences.getRecipePreferences(this).getName());
+        
         if (savedInstanceState == null) {
 
             Bundle arguments = new Bundle();
-            arguments.putParcelableArrayList("sfsr",
-                    getIntent().getParcelableArrayListExtra("sfsr")
+            arguments.putParcelableArrayList(Constants.RECIPE_STEPS,
+                    getIntent().getParcelableArrayListExtra(Constants.RECIPE_STEPS)
             );
 
             StepsFragment fragment = new StepsFragment();
@@ -39,6 +42,8 @@ public class StepsActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container_steps_fragment, fragment)
                     .commit();
+
+
         }
     }
 }

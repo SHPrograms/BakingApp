@@ -13,7 +13,6 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".recipes.RecipesActivity"
-            android:label="@string/title_activity_recipes"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,14 +20,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-   <activity android:name=".recipes.StepsActivity"
-       android:label="@string/title_activity_recipe">
-       <meta-data
-           android:name="android.support.PARENT_ACTIVITY"
-           android:value=".recipes.RecipesActivity" />
-
-   </activity>
-
+        <activity
+            android:name=".recipes.StepsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".recipes.RecipesActivity" />
+        </activity>
     </application>
 </manifest>
