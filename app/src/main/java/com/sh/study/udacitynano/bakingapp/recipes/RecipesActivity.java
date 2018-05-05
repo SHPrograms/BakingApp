@@ -20,15 +20,12 @@ import butterknife.ButterKnife;
  * @version 1.0
  * @since 2018-04-14
  */
-public class RecipesActivity extends AppCompatActivity implements RecipesFragment.OnRecipeClickListener {
+public class RecipesActivity extends AppCompatActivity implements RecipesInterface {
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.ingredients_layout)
     public LinearLayout ingredientsLayout;
 
     private static final String CLASS_NAME = "RecipesActivity";
-    private boolean twoPane;
-
-    //TODO: onSavedInstanceState save clicked recipe.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,37 +33,35 @@ public class RecipesActivity extends AppCompatActivity implements RecipesFragmen
         setContentView(R.layout.activity_recipes);
         ButterKnife.bind(this);
         SHDebug.debugTag(CLASS_NAME, "onCreate:End");
-/*
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-        } else {
-            if (ingredientsLayout.getVisibility() == View.VISIBLE) {
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                        0,
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        2.0f
-                );
-                ingredientsLayout.setLayoutParams(param);
-            }
-            else {
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
-                        0,
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        0.0f
-                );
-                ingredientsLayout.setLayoutParams(param);
-            }
-        }*/
+        if (RecipesPreferences.getRecipePreferences(this) == null) ingredientsLayout.setVisibility(View.GONE);
     }
 
-    /**
-     * Single recipe was clicked
-     *
-     * @see RecipesFragment.OnRecipeClickListener
-     * @param recipe {@link Recipe}
-     */
+    //TODO: onSavedInstanceState save position of clicked recipe.
     @Override
-    public void onRecipeSelected(Recipe recipe) {
-        SHDebug.debugTag(CLASS_NAME, "onRecipeSelected");
-       ingredientsLayout.setVisibility(View.VISIBLE);
+    protected void onSaveInstanceState(Bundle outState) {
+        SHDebug.debugTag(CLASS_NAME, "onSaveInstanceState:start");
+//        outState.putInt("position", mPosition);
+        super.onSaveInstanceState(outState);
+  }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        SHDebug.debugTag(CLASS_NAME, "onRestoreInstanceState:start");
+//        mPosition = savedInstanceState.getInt("position");
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onClickIngedient(Recipe recipe) {
+        SHDebug.debugTag(CLASS_NAME, "onClickIngedient");
+        if (ingredientsLayout.getVisibility() != View.VISIBLE) ingredientsLayout.setVisibility(View.VISIBLE);
+        RecipesPreferences.setRecipePreferences(this, recipe);
+    }
+
+    @Override
+    public void onClickStep(Recipe recipe) {
+        SHDebug.debugTag(CLASS_NAME, "onClickStep");
+        if (ingredientsLayout.getVisibility() != View.VISIBLE) ingredientsLayout.setVisibility(View.VISIBLE);
+        RecipesPreferences.setRecipePreferences(this, recipe);
     }
 }

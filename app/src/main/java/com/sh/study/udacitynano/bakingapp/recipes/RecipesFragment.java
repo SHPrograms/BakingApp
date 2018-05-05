@@ -1,5 +1,6 @@
 package com.sh.study.udacitynano.bakingapp.recipes;
 
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +34,7 @@ import butterknife.Unbinder;
  * @version 1.0
  * @since 2018-04-22
  */
-public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesAdapterOnClickHandler {
+public class RecipesFragment extends Fragment implements RecipesInterface {
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.recipes_list_rv)
     RecyclerView recipesRecyclerView;
@@ -43,15 +44,7 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
     private RecipesViewModel recipesViewModel;
     private RecipesAdapter recipesAdapter;
 
-    private OnRecipeClickListener recipeClickListener;
-
-    /**
-     * Single recipe was clicked
-     */
-    // TODO: Can I use single listener from RecipesAdapter and implement it in RecipesActivity?
-    public interface OnRecipeClickListener {
-        void onRecipeSelected(Recipe recipe);
-    }
+    private RecipesInterface recipeClickListener;
 
     public RecipesFragment() {
         SHDebug.debugTag(CLASS_NAME, "constructor");
@@ -60,12 +53,19 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            recipeClickListener = (OnRecipeClickListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnRecipeClickListener");
+
+        if (context instanceof RecipesInterface) {
+            recipeClickListener = (RecipesInterface) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement RecipesInterface");
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        recipeClickListener = null;
     }
 
     @Override
@@ -91,8 +91,10 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
         recipesAdapter = new RecipesAdapter(this);
         recipesRecyclerView.setAdapter(recipesAdapter);
 
-//        recipesViewModel = ViewModelProviders.of(this).get(RecipesViewModel.class);
         recipesViewModel.getRecipes().observe(this, recipes -> recipesAdapter.setRecipes(recipes));
+
+        if (RecipesPreferences.getRecipePreferences(getActivity()) != null)
+            recipesViewModel.setRecipe(RecipesPreferences.getRecipePreferences(getActivity()));
 
         return view;
     }
@@ -105,28 +107,33 @@ public class RecipesFragment extends Fragment implements RecipesAdapter.RecipesA
     }
 
     /**
-     * Single recipe was clicked.
+     * Ingredient Button for recipe was clicked.
+     * Implement {@link RecipesInterface}
      *
-     * Implement {@link RecipesAdapter.RecipesAdapterOnClickHandler}
-     *
-     * @param recipe Chosen {@link Recipe}
-     * @param v Clicked view
+     * @param recipe Clicked recipe
      */
     @Override
-    public void onClick(Recipe recipe, View v) {
-        SHDebug.debugTag(CLASS_NAME, "onClick");
-//        recipesViewModel.setRecipe(recipe);
-        if (v instanceof Button) {
-            // List of ingredients
-            recipesViewModel.setRecipe(recipe);
-            recipeClickListener.onRecipeSelected(recipe);
-        } else if (v instanceof ImageButton) {
-            // Steps
-            Intent intent = new Intent(this.getContext(), StepsActivity.class);
-            ArrayList<Step> listOfsteps = new ArrayList<>(recipe.getSteps().size());
-            listOfsteps.addAll(recipe.getSteps());
-            intent.putParcelableArrayListExtra("sfsr", listOfsteps);
-            startActivity(intent);
-        }
+    public void onClickIngedient(Recipe recipe) {
+        SHDebug.debugTag(CLASS_NAME, "onClickIngedient");
+        recipesViewModel.setRecipe(recipe);
+        recipeClickListener.onClickIngedient(recipe);
+    }
+
+    /**
+     * Step Button for recipe was clicked.
+     * Implement {@link RecipesInterface}
+     *
+     * @param recipe Clicked recipe
+     */
+    @Override
+    public void onClickStep(Recipe recipe) {
+        SHDebug.debugTag(CLASS_NAME, "onClickStep");
+        recipesViewModel.setRecipe(recipe);
+        recipeClickListener.onClickStep(recipe);
+        Intent intent = new Intent(this.getContext(), StepsActivity.class);
+        ArrayList<Step> listOfsteps = new ArrayList<>(recipe.getSteps().size());
+        listOfsteps.addAll(recipe.getSteps());
+        intent.putParcelableArrayListExtra("sfsr", listOfsteps);
+        startActivity(intent);
     }
 }

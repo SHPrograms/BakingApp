@@ -7,7 +7,8 @@ import android.arch.lifecycle.ViewModel;
 import com.google.gson.GsonBuilder;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
 import com.sh.study.udacitynano.bakingapp.model.Recipe;
-import com.sh.study.udacitynano.bakingapp.network.NetworkService;
+import com.sh.study.udacitynano.bakingapp.network.NetworkConnection;
+import com.sh.study.udacitynano.bakingapp.network.NetworkInterface;
 
 import java.util.List;
 
@@ -26,7 +27,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 class RecipesViewModel extends ViewModel {
     private static final String CLASS_NAME = "RecipesViewModel";
-    private static final String RECIPES_BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/";
 
     private final MutableLiveData<List<Recipe>> recipes = new MutableLiveData<>();
     private final MutableLiveData<Recipe> selectedRecipe = new MutableLiveData<>();
@@ -38,6 +38,7 @@ class RecipesViewModel extends ViewModel {
 
     /**
      * Set chosen recipe
+     *
      * @param recipe {@link Recipe}
      */
     public void setRecipe(Recipe recipe) {
@@ -47,6 +48,7 @@ class RecipesViewModel extends ViewModel {
 
     /**
      * Get chosen recipe
+     *
      * @return {@link Recipe}
      */
     public LiveData<Recipe> getRecipe() {
@@ -56,28 +58,23 @@ class RecipesViewModel extends ViewModel {
 
     /**
      * Get all recipes. Fetch if not exist.
+     *
      * @return {@link List} of {@link Recipe}
      */
     public LiveData<List<Recipe>> getRecipes() {
         SHDebug.debugTag(CLASS_NAME, "getRecipes");
-        if (recipes != null) return recipes;
-        else {
+        if (recipes == null)
             setRecipes();
-            return recipes;
-        }
+        return recipes;
     }
 
+    /**
+     * Download JSON data from internet
+     */
     private void setRecipes() {
         SHDebug.debugTag(CLASS_NAME, "setRecipes");
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(RECIPES_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
-                .build();
-
-        NetworkService service = retrofit.create(NetworkService.class);
-
-        Call<List<Recipe>> reviewResultCallback = service.getRecipes();
-
-        reviewResultCallback.enqueue(new Callback<List<Recipe>>() {
+        NetworkConnection networkConnection = new NetworkConnection();
+        networkConnection.downloadRecipes().enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 SHDebug.debugTag(CLASS_NAME, "onResponse");

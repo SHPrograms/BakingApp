@@ -14,7 +14,7 @@ import retrofit2.http.GET;
  * @version 1.0
  * @since 2018-04-22
  */
-public interface NetworkService {
+public interface NetworkInterface {
     @GET("baking.json")
     Call<List<Recipe>> getRecipes();
 }

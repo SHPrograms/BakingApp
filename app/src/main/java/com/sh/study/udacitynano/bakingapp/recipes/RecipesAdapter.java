@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.view.View.OnClickListener;
 
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.model.Recipe;
@@ -32,16 +31,9 @@ class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterV
         this.notifyDataSetChanged();
     }
 
-    final private RecipesAdapterOnClickHandler clickHandler;
+    final private RecipesInterface clickHandler;
 
-    /**
-     * Single recipe was clicked
-     */
-    public interface RecipesAdapterOnClickHandler {
-        void onClick(Recipe recipe, View v);
-    }
-
-    public RecipesAdapter(RecipesAdapterOnClickHandler mClickHandler) {
+    RecipesAdapter(RecipesInterface mClickHandler) {
         this.clickHandler = mClickHandler;
     }
 
@@ -64,34 +56,35 @@ class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterV
         else return recipes.size();
     }
 
-    public class RecipesAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
+    public class RecipesAdapterViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.recipe_name)
         Button recipeName;
 
         @BindView(R.id.recipe_steps)
         ImageButton recipeSteps;
 
+        private static final int INGREDIENTS = 1;
+        private static final int STEPS = 2;
+
         RecipesAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            recipeName.setOnClickListener(this);
-            recipeSteps.setOnClickListener(this);
+            recipeName.setOnClickListener((View v) -> {Clicked(INGREDIENTS);});
+            recipeSteps.setOnClickListener((View v) -> {Clicked(STEPS);});
         }
 
         /**
          * Single recipe was clicked so we need:
          * - show ingredients or steps for recipe send as parameter
-
-         * @see OnClickListener
-         * @param v clicked view
+         *
+         * @param source Ingredients or steps view
          */
-        @Override
-        public void onClick(View v) {
+        private void Clicked(int source) {
             int adapterPosition = getAdapterPosition();
             Recipe recipe = recipes.get(adapterPosition);
-            // TODO: change second parameter to static int value ingredient or step and...
-            // implement situation when both are visible (in the future for tablets)
-            clickHandler.onClick(recipe, v);
+            // TODO: implement situation when both are visible (in the future for tablets)
+            if (source == INGREDIENTS) clickHandler.onClickIngedient(recipe);
+            else if (source == STEPS) clickHandler.onClickStep(recipe);
         }
     }
 }
