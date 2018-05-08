@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/recipe_step_description_short"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -40,7 +40,7 @@
 
         <TextView
             android:id="@+id/recipe_step_description_long"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -50,19 +50,31 @@
             app:layout_constraintTop_toBottomOf="@id/recipe_step_description_short"
             tools:text="very long description" />
 
-        <ImageButton
+<!-- TODO Add this
+        <android.support.constraint.Guideline
+            android:id="@+id/horizontalHalf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="256dp" />
+-->
+
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/recipe_step_video_url"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_margin="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipe_step_description_long"
             app:layout_constraintEnd_toStartOf="@id/recipe_step_thumb_url"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/recipe_step_thumb_url"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_margin="8dp"
             app:layout_constraintBottom_toBottomOf="parent"

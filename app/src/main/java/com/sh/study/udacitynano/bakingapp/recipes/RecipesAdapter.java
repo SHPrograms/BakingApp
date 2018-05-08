@@ -26,15 +26,15 @@ import butterknife.ButterKnife;
 class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterViewHolder> {
     private List<Recipe> recipes;
 
+    final private RecipesInterface clickHandler;
+
+    RecipesAdapter(RecipesInterface clickHandler) {
+        this.clickHandler = clickHandler;
+    }
+
     public void setRecipes(List<Recipe> recipes) {
         this.recipes = recipes;
         this.notifyDataSetChanged();
-    }
-
-    final private RecipesInterface clickHandler;
-
-    RecipesAdapter(RecipesInterface mClickHandler) {
-        this.clickHandler = mClickHandler;
     }
 
     @NonNull
@@ -61,7 +61,7 @@ class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesAdapterV
         Button recipeName;
 
         @BindView(R.id.recipe_steps)
-        ImageButton recipeSteps;
+        Button recipeSteps;
 
         private static final int INGREDIENTS = 1;
         private static final int STEPS = 2;

@@ -83,8 +83,9 @@ public class IngredientsFragment extends Fragment {
                     R.string.ingredients_servings_tv_caption, recipe.getServings()));
 
             if ((recipe.getImage() != null) && (!recipe.getImage().isEmpty())) {
-                Picasso.get()
+                Picasso.with(ingredientsRecipeImageView.getContext())
                         .load(recipe.getImage())
+                        .fit()
                         .resize(50,50)
                         .centerCrop()
                         .placeholder(R.drawable.placeholder_50x50)
