@@ -10,5 +10,5 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
  * @since 2018-05-06
  */
 public interface VideoInterface {
-    void onClickVideo(String video, SimpleExoPlayerView view);
+    void onClickVideo(String urlVideo, String urlImage);
 }

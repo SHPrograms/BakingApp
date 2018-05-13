@@ -58,12 +58,10 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepAdapterV
         holder.stepName.setText(holder.itemView.getResources().getString(R.string.steps_number, steps.get(position).getId()));
         holder.stepDescriptionShort.setText(String.valueOf(steps.get(position).getShortDescription()));
         holder.stepDescriptionLong.setText(String.valueOf(steps.get(position).getDescription()));
-
+/*
         if ((steps.get(position).getVideoURL() != null) && (!steps.get(position).getVideoURL().isEmpty())) {
             // TODO: Create thumb or put image from getThumbnailURL as a Thumb for player
             holder.stepThumb.setVisibility(View.GONE);
-            // TODO: it doesn't work
-//            holder.stepVideo.setDefaultArtwork(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.placeholder_50x50));
         } else {
             holder.stepVideo.setVisibility(View.GONE);
             if ((steps.get(position).getThumbnailURL() != null) && (!steps.get(position).getThumbnailURL().isEmpty())) {
@@ -76,6 +74,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepAdapterV
                         .into(holder.stepThumb);
             } else holder.stepThumb.setVisibility(View.GONE);
         }
+*/
     }
 
     @Override
@@ -94,12 +93,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepAdapterV
         @BindView(R.id.recipe_step_description_long)
         TextView stepDescriptionLong;
 
-        @BindView(R.id.recipe_step_thumb_url)
-        ImageView stepThumb;
-
         //TODO: Replace SimpleExoPlayerView with a Button to create a new Activity or fragment only for Video!
-        @BindView(R.id.recipe_step_video_url)
-        SimpleExoPlayerView stepVideo;
 
         StepAdapterViewHolder(View itemView) {
             super(itemView);
@@ -109,7 +103,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepAdapterV
                 public void onClick(View v) {
                     int adapterPosition = getAdapterPosition();
                     Step step = steps.get(adapterPosition);
-                    clickHandler.onClickVideo(step.getVideoURL(), stepVideo);
+                    clickHandler.onClickVideo(step.getVideoURL(), step.getThumbnailURL());
                 }
             });
 //            stepVideo.setDefaultArtwork(BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.placeholder_50x50));
@@ -133,11 +127,12 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepAdapterV
             });
 */
         }
-
+/*
         private void VideoClicked(SimpleExoPlayerView view) {
             int adapterPosition = getAdapterPosition();
             Step step = steps.get(adapterPosition);
             clickHandler.onClickVideo(step.getVideoURL(), view);
         }
+        */
     }
 }

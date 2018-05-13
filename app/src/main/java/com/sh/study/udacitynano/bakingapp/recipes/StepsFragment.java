@@ -1,6 +1,7 @@
 package com.sh.study.udacitynano.bakingapp.recipes;
 
 import android.app.NotificationManager;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -44,7 +46,7 @@ import butterknife.Unbinder;
 
 /**
  * Fragment used to show list of steps in Recycler View.
- *
+ * <p>
  * ExoPlayer functionality is based on Udacity's Classical Music Quiz App
  * {@see https://github.com/udacity/AdvancedAndroid_ClassicalMusicQuiz}
  *
@@ -53,6 +55,12 @@ import butterknife.Unbinder;
  * @since 2018-04-29
  */
 public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer.EventListener {
+    @BindView(R.id.recipe_step_video_url)
+    SimpleExoPlayerView stepVideo;
+
+    @BindView(R.id.recipe_step_thumb_url)
+    ImageView stepThumb;
+
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.steps_rv)
     RecyclerView stepsRecyclerView;
@@ -94,7 +102,6 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
         SHDebug.debugTag(CLASS_NAME, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
         unbinder = ButterKnife.bind(this, view);
-
 
         stepsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         assert stepsRecyclerView != null;
@@ -167,10 +174,10 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
      */
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if((playbackState == ExoPlayer.STATE_READY) && playWhenReady){
+        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
             mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
                     mPlayer.getCurrentPosition(), 1f);
-        } else if((playbackState == ExoPlayer.STATE_READY)){
+        } else if ((playbackState == ExoPlayer.STATE_READY)) {
             mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
                     mPlayer.getCurrentPosition(), 1f);
         }
@@ -200,28 +207,28 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
     /**
      * VideoInterface
      *
-     * @param video
+     * @param
+     * @param
      */
     @Override
-    public void onClickVideo(String video, SimpleExoPlayerView view) {
-        initializePlayer(Uri.parse(video), view);
-
+    public void onClickVideo(String urlVideo, String urlImage) {
+        initializePlayer(Uri.parse(urlVideo), Uri.parse(urlImage));
     }
 
-    private void initializePlayer(Uri uri, SimpleExoPlayerView view) {
+    private void initializePlayer(Uri uriVideo, Uri uriImage) {
         if (mPlayer == null) {
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
             mPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-            view.setPlayer(mPlayer);
+            stepVideo.setPlayer(mPlayer);
 
             // Set the ExoPlayer.EventListener to this activity.
             mPlayer.addListener(this);
 
             // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(getContext(), "ClassicalMusicQuiz");
-            MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
+            MediaSource mediaSource = new ExtractorMediaSource(uriVideo, new DefaultDataSourceFactory(
                     getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             mPlayer.prepare(mediaSource);
             mPlayer.setPlayWhenReady(true);
@@ -257,5 +264,9 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
 
         // Start the Media Session since the activity is active.
         mMediaSession.setActive(true);
+
+        // TODO: it doesn't work?
+        stepVideo.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_50x50));
+
     }
 }
