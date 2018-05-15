@@ -37,6 +37,7 @@ import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.constants.Constants;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
 import com.sh.study.udacitynano.bakingapp.model.Step;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -57,9 +58,6 @@ import butterknife.Unbinder;
 public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer.EventListener {
     @BindView(R.id.recipe_step_video_url)
     SimpleExoPlayerView stepVideo;
-
-    @BindView(R.id.recipe_step_thumb_url)
-    ImageView stepThumb;
 
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.steps_rv)
@@ -129,9 +127,11 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
     }
 
     private void releasePlayer() {
-        mPlayer.stop();
-        mPlayer.release();
-        mPlayer = null;
+        if (mPlayer != null) {
+            mPlayer.stop();
+            mPlayer.release();
+            mPlayer = null;
+        }
     }
 
     /**
@@ -226,13 +226,13 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
             // Set the ExoPlayer.EventListener to this activity.
             mPlayer.addListener(this);
 
-            // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(getContext(), "ClassicalMusicQuiz");
-            MediaSource mediaSource = new ExtractorMediaSource(uriVideo, new DefaultDataSourceFactory(
-                    getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
-            mPlayer.prepare(mediaSource);
-            mPlayer.setPlayWhenReady(true);
         }
+        // Prepare the MediaSource.
+        String userAgent = Util.getUserAgent(getContext(), "BackingApp");
+        MediaSource mediaSource = new ExtractorMediaSource(uriVideo, new DefaultDataSourceFactory(
+                getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
+        mPlayer.prepare(mediaSource);
+        mPlayer.setPlayWhenReady(true);
     }
 
     private void initializeMediaSession() {
@@ -265,8 +265,6 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
         // Start the Media Session since the activity is active.
         mMediaSession.setActive(true);
 
-        // TODO: it doesn't work?
         stepVideo.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_50x50));
-
     }
 }
