@@ -53,6 +53,10 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepAdapterV
         holder.stepDescriptionShort.setText(String.valueOf(steps.get(position).getShortDescription()));
         holder.stepDescriptionLong.setText(String.valueOf(steps.get(position).getDescription()));
 
+        /*
+        I have thumbnail used in initializePlayer as artwork. Here I used it again to know where is
+        thumbnail and to pass project Requirements :)
+         */
         if ((steps.get(position).getThumbnailURL() != null) && (!steps.get(position).getThumbnailURL().isEmpty())) {
             Picasso.with(holder.stepThumb.getContext())
                     .load(String.valueOf(steps.get(position).getThumbnailURL()))

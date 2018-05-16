@@ -1,7 +1,8 @@
 package com.sh.study.udacitynano.bakingapp.recipes;
 
-import android.app.NotificationManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -33,11 +33,13 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.constants.Constants;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
 import com.sh.study.udacitynano.bakingapp.model.Step;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
@@ -63,17 +65,13 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
     @BindView(R.id.steps_rv)
     RecyclerView stepsRecyclerView;
 
-
     private static final String CLASS_NAME = "IngredientsFragment";
     private Unbinder unbinder;
     private ArrayList<Step> steps;
 
-
     private SimpleExoPlayer mPlayer;
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
-    private NotificationManager mNotificationManager;
-
 
     public StepsFragment() {
         SHDebug.debugTag(CLASS_NAME, "constructor");
@@ -83,7 +81,6 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SHDebug.debugTag(CLASS_NAME, "onCreate");
-//        recipesViewModel = ViewModelProviders.of(getActivity()).get(RecipesViewModel.class);
         try {
             if (getArguments().containsKey(Constants.RECIPE_STEPS)) {
                 steps = getArguments().getParcelableArrayList(Constants.RECIPE_STEPS);
@@ -107,13 +104,6 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
         stepsRecyclerView.setAdapter(stepsAdapter);
         stepsAdapter.setSteps(steps);
         initializeMediaSession();
-
-/*
-        recipesViewModel.getRecipe().observe(this, steps -> {
-            stepsAdapter.setSteps(steps.getSteps());
-        });
-*/
-
         return view;
     }
 
@@ -126,13 +116,8 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
         unbinder.unbind();
     }
 
-    private void releasePlayer() {
-        if (mPlayer != null) {
-            mPlayer.stop();
-            mPlayer.release();
-            mPlayer = null;
-        }
-    }
+    // TODO: Save and restore state of ExoPlayer?
+
 
     /**
      * ExoPlayer
@@ -182,8 +167,6 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
                     mPlayer.getCurrentPosition(), 1f);
         }
         mMediaSession.setPlaybackState(mStateBuilder.build());
-        // TODO: Do I need that?
-//        showNotification(mStateBuilder.build());
     }
 
     /**
@@ -212,10 +195,47 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
      */
     @Override
     public void onClickVideo(String urlVideo, String urlImage) {
-        initializePlayer(Uri.parse(urlVideo), Uri.parse(urlImage));
+        initializePlayer(Uri.parse(urlVideo), urlImage);
     }
 
-    private void initializePlayer(Uri uriVideo, Uri uriImage) {
+    private void releasePlayer() {
+        if (mPlayer != null) {
+            mPlayer.stop();
+            mPlayer.release();
+            mPlayer = null;
+        }
+    }
+
+    private void initializePlayer(Uri uriVideo, String urlImage) {
+
+        // TODO: Error when Nutella Pie -> Step 5 (no Vid but thumb)
+        // TODO: Check other recipes if every link is run properly if not and there is no way to manage via other codecs add error handling
+        // TODO: Check speling errors for Baking if somewhere I don't have backing
+
+        if ((urlImage != null) && (!urlImage.equals(""))) {
+            Picasso.with(getContext())
+                    .load(urlImage)
+                    .fit()
+                    .centerCrop()
+                    .placeholder(R.drawable.placeholder_50x50)
+                    .error(R.drawable.placeholder_50x50)
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            stepVideo.setDefaultArtwork(bitmap);
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
+                            stepVideo.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_50x50));
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+}
+                    });
+        }
+
         if (mPlayer == null) {
             // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -228,7 +248,7 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
 
         }
         // Prepare the MediaSource.
-        String userAgent = Util.getUserAgent(getContext(), "BackingApp");
+        String userAgent = Util.getUserAgent(getContext(), "BakingApp");
         MediaSource mediaSource = new ExtractorMediaSource(uriVideo, new DefaultDataSourceFactory(
                 getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
         mPlayer.prepare(mediaSource);
