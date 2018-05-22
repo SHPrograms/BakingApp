@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2017 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.sh.study.udacitynano.bakingapp.recipes;
 
 import android.graphics.Bitmap;
@@ -8,32 +23,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 
+import com.sh.study.udacitynano.bakingapp.mediaplayer.MyMediaPlayer;
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.constants.Constants;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
@@ -49,15 +47,12 @@ import butterknife.Unbinder;
 
 /**
  * Fragment used to show list of steps in Recycler View.
- * <p>
- * ExoPlayer functionality is based on Udacity's Classical Music Quiz App
- * {@see https://github.com/udacity/AdvancedAndroid_ClassicalMusicQuiz}
  *
  * @author Sławomir Hagiel
  * @version 1.0
  * @since 2018-04-29
  */
-public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer.EventListener {
+public class StepsFragment extends Fragment implements VideoInterface {
     @BindView(R.id.recipe_step_video_url)
     SimpleExoPlayerView stepVideo;
 
@@ -66,12 +61,15 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
     RecyclerView stepsRecyclerView;
 
     private static final String CLASS_NAME = "IngredientsFragment";
+    private static final String IS_PLAYING = "isPlaying";
+    private static final String VIDEO_POSITION = "videoPosition";
+    private static final String VIDEO_URI = "urlVideo";
+    private static final String VIDEO_IMAGE = "videoImage";
+
     private Unbinder unbinder;
     private ArrayList<Step> steps;
 
-    private SimpleExoPlayer mPlayer;
-    private static MediaSessionCompat mMediaSession;
-    private PlaybackStateCompat.Builder mStateBuilder;
+    private MyMediaPlayer mediaPlayer;
 
     public StepsFragment() {
         SHDebug.debugTag(CLASS_NAME, "constructor");
@@ -103,7 +101,16 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
         StepsAdapter stepsAdapter = new StepsAdapter(this::onClickVideo);
         stepsRecyclerView.setAdapter(stepsAdapter);
         stepsAdapter.setSteps(steps);
-        initializeMediaSession();
+        mediaPlayer = new MyMediaPlayer(getContext());
+        mediaPlayer.initializeMediaSession();
+        stepVideo.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_50x50));
+        if (savedInstanceState != null) {
+            initializePlayer(
+                    Uri.parse(savedInstanceState.getString(VIDEO_URI)),
+                    savedInstanceState.getString(VIDEO_IMAGE),
+                    savedInstanceState.getBoolean(IS_PLAYING),
+                    savedInstanceState.getLong(VIDEO_POSITION));
+        }
         return view;
     }
 
@@ -111,80 +118,20 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
     public void onDestroyView() {
         super.onDestroyView();
         SHDebug.debugTag(CLASS_NAME, "onDestroyView");
-        releasePlayer();
-        mMediaSession.setActive(false);
+        mediaPlayer.releasePlayer();
+        mediaPlayer.setActiveSession(false);
         unbinder.unbind();
     }
 
-    // TODO: Save and restore state of ExoPlayer?
-
-
-    /**
-     * ExoPlayer
-     *
-     * @param timeline
-     * @param manifest
-     */
+    // TODO: Artwork is not saving and check recyclerView Position for tablets
+    // TODO: Full screen mode.
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
-
-    }
-
-    /**
-     * ExoPlayer
-     *
-     * @param trackGroups
-     * @param trackSelections
-     */
-    @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-    }
-
-    /**
-     * ExoPlayer
-     *
-     * @param isLoading
-     */
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
-
-    }
-
-    /**
-     * ExoPlayer
-     *
-     * @param playWhenReady
-     * @param playbackState
-     */
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
-                    mPlayer.getCurrentPosition(), 1f);
-        } else if ((playbackState == ExoPlayer.STATE_READY)) {
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
-                    mPlayer.getCurrentPosition(), 1f);
-        }
-        mMediaSession.setPlaybackState(mStateBuilder.build());
-    }
-
-    /**
-     * ExoPlayer
-     *
-     * @param error
-     */
-    @Override
-    public void onPlayerError(ExoPlaybackException error) {
-
-    }
-
-    /**
-     * ExoPlayer
-     */
-    @Override
-    public void onPositionDiscontinuity() {
-
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_PLAYING, mediaPlayer.getPlayStatus());
+        outState.putLong(VIDEO_POSITION, mediaPlayer.getPosition());
+        outState.putString(VIDEO_URI, mediaPlayer.getUri());
+        mediaPlayer.releasePlayer();
     }
 
     /**
@@ -195,29 +142,14 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
      */
     @Override
     public void onClickVideo(String urlVideo, String urlImage) {
-        initializePlayer(Uri.parse(urlVideo), urlImage);
+        initializePlayer(Uri.parse(urlVideo), urlImage, true, 0);
     }
 
-    private void releasePlayer() {
-        if (mPlayer != null) {
-            mPlayer.stop();
-            mPlayer.release();
-            mPlayer = null;
-        }
-    }
-
-    private void initializePlayer(Uri uriVideo, String urlImage) {
-
-        // TODO: Error when Nutella Pie -> Step 5 (no Vid but thumb)
-        // TODO: Check other recipes if every link is run properly if not and there is no way to manage via other codecs add error handling
-        // TODO: Check speling errors for Baking if somewhere I don't have backing
-
+    private void initializePlayer(Uri uriVideo, String urlImage, Boolean init, long position) {
         if ((urlImage != null) && (!urlImage.equals(""))) {
             Picasso.with(getContext())
                     .load(urlImage)
-                    .fit()
-                    .centerCrop()
-                    .placeholder(R.drawable.placeholder_50x50)
+                    .placeholder(R.drawable.placeholder_100x50)
                     .error(R.drawable.placeholder_50x50)
                     .into(new Target() {
                         @Override
@@ -227,64 +159,16 @@ public class StepsFragment extends Fragment implements VideoInterface, ExoPlayer
 
                         @Override
                         public void onBitmapFailed(Drawable errorDrawable) {
-                            stepVideo.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_50x50));
+                            stepVideo.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_100x50));
                         }
 
                         @Override
                         public void onPrepareLoad(Drawable placeHolderDrawable) {
-}
+                        }
                     });
         }
-
-        if (mPlayer == null) {
-            // Create an instance of the ExoPlayer.
-            TrackSelector trackSelector = new DefaultTrackSelector();
-            LoadControl loadControl = new DefaultLoadControl();
-            mPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
-            stepVideo.setPlayer(mPlayer);
-
-            // Set the ExoPlayer.EventListener to this activity.
-            mPlayer.addListener(this);
-
-        }
-        // Prepare the MediaSource.
-        String userAgent = Util.getUserAgent(getContext(), "BakingApp");
-        MediaSource mediaSource = new ExtractorMediaSource(uriVideo, new DefaultDataSourceFactory(
-                getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
-        mPlayer.prepare(mediaSource);
-        mPlayer.setPlayWhenReady(true);
-    }
-
-    private void initializeMediaSession() {
-
-        // Create a MediaSessionCompat.
-        mMediaSession = new MediaSessionCompat(getContext(), "seesionId");
-
-        // Enable callbacks from MediaButtons and TransportControls.
-        mMediaSession.setFlags(
-                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
-        // Do not let MediaButtons restart the player when the app is not visible.
-        mMediaSession.setMediaButtonReceiver(null);
-
-        // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
-        mStateBuilder = new PlaybackStateCompat.Builder()
-                .setActions(
-                        PlaybackStateCompat.ACTION_PLAY |
-                                PlaybackStateCompat.ACTION_PAUSE |
-                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
-                                PlaybackStateCompat.ACTION_PLAY_PAUSE);
-
-        mMediaSession.setPlaybackState(mStateBuilder.build());
-
-
-        // MySessionCallback has methods that handle callbacks from a media controller.
-        mMediaSession.setCallback(new MyMediaSessionCallback(mPlayer));
-
-        // Start the Media Session since the activity is active.
-        mMediaSession.setActive(true);
-
-        stepVideo.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_50x50));
+        mediaPlayer.setVideoUri(uriVideo);
+        mediaPlayer.setPosition(position);
+        mediaPlayer.initPlayer(stepVideo, init);
     }
 }
