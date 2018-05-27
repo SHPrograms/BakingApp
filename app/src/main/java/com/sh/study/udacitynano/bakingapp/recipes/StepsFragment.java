@@ -1,20 +1,6 @@
-/*
- * Copyright (C) 2017 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  	http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.sh.study.udacitynano.bakingapp.recipes;
 
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -22,7 +8,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.Guideline;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -59,6 +47,9 @@ public class StepsFragment extends Fragment implements VideoInterface {
     @SuppressWarnings("WeakerAccess")
     @BindView(R.id.steps_rv)
     RecyclerView stepsRecyclerView;
+
+    @BindView(R.id.horizontal_step)
+    Guideline stepsHorizontalLine;
 
     private static final String CLASS_NAME = "IngredientsFragment";
     private static final String IS_PLAYING = "isPlaying";
@@ -110,6 +101,19 @@ public class StepsFragment extends Fragment implements VideoInterface {
                     savedInstanceState.getString(VIDEO_IMAGE),
                     savedInstanceState.getBoolean(IS_PLAYING),
                     savedInstanceState.getLong(VIDEO_POSITION));
+            if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                stepsRecyclerView.setVisibility(View.GONE);
+                stepsHorizontalLine.setGuidelinePercent(1f);
+                if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+                }
+            }
+        } else {
+            initializePlayer(null, null, false, 0);
+            if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                stepVideo.setVisibility(View.GONE);
+                stepsHorizontalLine.setGuidelinePercent(0f);
+            }
         }
         return view;
     }
@@ -123,15 +127,15 @@ public class StepsFragment extends Fragment implements VideoInterface {
         unbinder.unbind();
     }
 
-    // TODO: Artwork is not saving and check recyclerView Position for tablets
-    // TODO: Full screen mode.
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(IS_PLAYING, mediaPlayer.getPlayStatus());
-        outState.putLong(VIDEO_POSITION, mediaPlayer.getPosition());
-        outState.putString(VIDEO_URI, mediaPlayer.getUri());
-        mediaPlayer.releasePlayer();
+        if (mediaPlayer != null) {
+            outState.putBoolean(IS_PLAYING, mediaPlayer.getPlayStatus());
+            outState.putLong(VIDEO_POSITION, mediaPlayer.getPosition());
+            outState.putString(VIDEO_URI, mediaPlayer.getUri());
+            mediaPlayer.releasePlayer();
+        }
     }
 
     /**
@@ -143,6 +147,14 @@ public class StepsFragment extends Fragment implements VideoInterface {
     @Override
     public void onClickVideo(String urlVideo, String urlImage) {
         initializePlayer(Uri.parse(urlVideo), urlImage, true, 0);
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            stepsRecyclerView.setVisibility(View.GONE);
+            stepsHorizontalLine.setGuidelinePercent(1f);
+            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+            }
+            stepVideo.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initializePlayer(Uri uriVideo, String urlImage, Boolean init, long position) {

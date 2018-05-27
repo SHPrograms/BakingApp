@@ -9,7 +9,6 @@
         android:id="@+id/recipe_step_video_url"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
         app:layout_constraintBottom_toTopOf="@+id/horizontal_step"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"

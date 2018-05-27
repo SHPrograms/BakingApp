@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2017 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  	http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.sh.study.udacitynano.bakingapp.mediaplayer;
 
 import android.content.Context;
@@ -24,7 +39,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 /**
- * ExoPlayer functionality is based on Udacity's Classical Music Quiz App and ExoPlayer Demo
+ * ExoPlayer functionality based on Udacity's Classical Music Quiz App and ExoPlayer Demo
  * {@see https://github.com/udacity/AdvancedAndroid_ClassicalMusicQuiz}
  * {@see https://github.com/google/ExoPlayer}
  *
@@ -49,16 +64,24 @@ public class MyMediaPlayer implements ExoPlayer.EventListener {
     }
 
     public boolean getPlayStatus() {
-        return mPlayer.getPlayWhenReady();
+        if (mPlayer != null)
+            return mPlayer.getPlayWhenReady();
+        else
+            return false;
     }
 
     public long getPosition() {
-        return mPlayer.getCurrentPosition();
+        if (mPlayer != null)
+            return mPlayer.getCurrentPosition();
+        else
+            return 0;
     }
 
     public String getUri() {
-        if (videoUri != null) return videoUri.toString();
-        else return "";
+        if (videoUri != null)
+            return videoUri.toString();
+        else
+            return "";
     }
 
     public void setPosition(long position) {
@@ -66,18 +89,11 @@ public class MyMediaPlayer implements ExoPlayer.EventListener {
     }
 
     public void initializeMediaSession() {
-        // Create a MediaSessionCompat.
-        mMediaSession = new MediaSessionCompat(mContext, "seesionId");
-
-        // Enable callbacks from MediaButtons and TransportControls.
+        mMediaSession = new MediaSessionCompat(mContext, "sessionId");
         mMediaSession.setFlags(
                 MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
                         MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
-        // Do not let MediaButtons restart the player when the app is not visible.
         mMediaSession.setMediaButtonReceiver(null);
-
-        // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
         mStateBuilder = new PlaybackStateCompat.Builder()
                 .setActions(
                         PlaybackStateCompat.ACTION_PLAY |
@@ -86,27 +102,19 @@ public class MyMediaPlayer implements ExoPlayer.EventListener {
                                 PlaybackStateCompat.ACTION_PLAY_PAUSE);
 
         mMediaSession.setPlaybackState(mStateBuilder.build());
-
-        // MySessionCallback has methods that handle callbacks from a media controller.
         mMediaSession.setCallback(new MyMediaSessionCallback(mPlayer));
-
-        // Start the Media Session since the activity is active.
         mMediaSession.setActive(true);
     }
 
     public void initPlayer(SimpleExoPlayerView stepVideo, Boolean init) {
         if (mPlayer == null) {
-            // Create an instance of the ExoPlayer.
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
             mPlayer = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
             stepVideo.setPlayer(mPlayer);
-
-            // Set the ExoPlayer.EventListener to this activity.
             mPlayer.addListener(this);
         }
         if ((videoUri != null) && (!videoUri.equals(""))) {
-            // Prepare the MediaSource.
             String userAgent = Util.getUserAgent(mContext, "BakingApp");
             MediaSource mediaSource = new ExtractorMediaSource(videoUri, new DefaultDataSourceFactory(
                     mContext, userAgent), new DefaultExtractorsFactory(), null, null);
