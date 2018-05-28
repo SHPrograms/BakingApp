@@ -4,4 +4,6 @@
     <string name="recipe_iv_contentDescription">Recipe Image</string>
     <string name="ingredients_servings_tv_caption">Recipe for %1$d servings</string>
     <string name="steps_number">Step %1$d</string>
+    <string name="widget_title">Baking</string>
+    <string name="add_widget">Add widget</string>
 </resources>
