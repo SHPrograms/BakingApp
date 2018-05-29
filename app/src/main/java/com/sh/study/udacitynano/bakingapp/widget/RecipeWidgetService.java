@@ -18,14 +18,14 @@ import android.content.Context;
  */
 public class RecipeWidgetService extends IntentService {
     // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
+   /* // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_FOO = "com.sh.study.udacitynano.bakingapp.widget.action.FOO";
     private static final String ACTION_BAZ = "com.sh.study.udacitynano.bakingapp.widget.action.BAZ";
 
     // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "com.sh.study.udacitynano.bakingapp.widget.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "com.sh.study.udacitynano.bakingapp.widget.extra.PARAM2";
-
+*/
     public RecipeWidgetService() {
         super("RecipeWidgetService");
     }
@@ -36,7 +36,7 @@ public class RecipeWidgetService extends IntentService {
      *
      * @see IntentService
      */
-    // TODO: Customize helper method
+  /*  // TODO: Customize helper method
     public static void startActionFoo(Context context, String param1, String param2) {
         Intent intent = new Intent(context, RecipeWidgetService.class);
         intent.setAction(ACTION_FOO);
@@ -44,7 +44,7 @@ public class RecipeWidgetService extends IntentService {
         intent.putExtra(EXTRA_PARAM2, param2);
         context.startService(intent);
     }
-
+*/
     /**
      * Starts this service to perform action Baz with the given parameters. If
      * the service is already performing a task this action will be queued.
@@ -52,16 +52,18 @@ public class RecipeWidgetService extends IntentService {
      * @see IntentService
      */
     // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
+ /*   public static void startActionBaz(Context context, String param1, String param2) {
         Intent intent = new Intent(context, RecipeWidgetService.class);
         intent.setAction(ACTION_BAZ);
         intent.putExtra(EXTRA_PARAM1, param1);
         intent.putExtra(EXTRA_PARAM2, param2);
         context.startService(intent);
     }
-
+*/
     @Override
     protected void onHandleIntent(Intent intent) {
+
+/*
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_FOO.equals(action)) {
@@ -74,6 +76,7 @@ public class RecipeWidgetService extends IntentService {
                 handleActionBaz(param1, param2);
             }
         }
+*/
     }
 
     /**

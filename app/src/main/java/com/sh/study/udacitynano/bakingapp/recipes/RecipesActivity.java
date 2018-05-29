@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.sh.study.udacitynano.bakingapp.R;
-import com.sh.study.udacitynano.bakingapp.constants.Constants;
 import com.sh.study.udacitynano.bakingapp.constants.SHDebug;
 import com.sh.study.udacitynano.bakingapp.model.Recipe;
 
@@ -38,23 +37,6 @@ public class RecipesActivity extends AppCompatActivity implements RecipesInterfa
             ingredientsLayout.setVisibility(View.GONE);
         else this.setTitle(RecipesPreferences.getRecipePreferences(this).getName());
     }
-
-/*
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        SHDebug.debugTag(CLASS_NAME, "onSaveInstanceState:start");
-        outState.putString(Constants.RECIPE_NAME, this.getTitle().toString());
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        SHDebug.debugTag(CLASS_NAME, "onRestoreInstanceState:start");
-        this.setTitle(savedInstanceState.getString(Constants.RECIPE_NAME, this.getTitle().toString()));
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-*/
 
     @Override
     public void onClickIngedient(Recipe recipe) {

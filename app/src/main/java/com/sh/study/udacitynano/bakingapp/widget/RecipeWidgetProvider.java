@@ -3,9 +3,12 @@ package com.sh.study.udacitynano.bakingapp.widget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.sh.study.udacitynano.bakingapp.R;
+import com.sh.study.udacitynano.bakingapp.recipes.RecipesPreferences;
 
 /**
  * Implementation of App Widget functionality.
@@ -17,14 +20,23 @@ import com.sh.study.udacitynano.bakingapp.R;
  */
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.widget_title);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
-        views.setTextViewText(R.id.widget_title, widgetText);
 
+        if (RecipesPreferences.getRecipePreferences(context) == null) {
+            views.setTextViewText(R.id.widget_title, "The recipe hasn't been selected.");
+            views.setViewVisibility(R.id.widget_lv, View.GONE);
+        } else {
+            views.setTextViewText(R.id.widget_title, "Ingredients for "+ RecipesPreferences.getRecipePreferences(context).getName());
+            views.setViewVisibility(R.id.widget_lv, View.VISIBLE);
+
+            Intent intent = new Intent(context, IngredientsViewsService.class);
+            views.setRemoteAdapter(R.id.widget_lv, intent);
+        }
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }

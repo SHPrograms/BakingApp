@@ -1,7 +1,6 @@
 package com.sh.study.udacitynano.bakingapp.recipes;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
@@ -21,7 +20,7 @@ public final class RecipesPreferences {
 
     static final String RECIPE = "recipe";
 
-    static Recipe getRecipePreferences(Context context) {
+    public static Recipe getRecipePreferences(Context context) {
         Gson gson = new Gson();
         String json = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(RECIPE, "");
