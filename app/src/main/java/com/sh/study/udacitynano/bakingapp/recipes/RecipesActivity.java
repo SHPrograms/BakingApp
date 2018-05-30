@@ -43,7 +43,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipesInterfa
         SHDebug.debugTag(CLASS_NAME, "onClickIngedient");
         if (ingredientsLayout.getVisibility() != View.VISIBLE)
             ingredientsLayout.setVisibility(View.VISIBLE);
-        RecipesPreferences.setRecipePreferences(this, recipe);
+        RecipesPreferences.setRecipePreferences(this, recipe, getApplication());
         this.setTitle(recipe.getName());
     }
 
@@ -52,7 +52,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipesInterfa
         SHDebug.debugTag(CLASS_NAME, "onClickStep");
         if (ingredientsLayout.getVisibility() != View.VISIBLE)
             ingredientsLayout.setVisibility(View.VISIBLE);
-        RecipesPreferences.setRecipePreferences(this, recipe);
+        RecipesPreferences.setRecipePreferences(this, recipe, getApplication());
         this.setTitle(recipe.getName());
     }
 }
