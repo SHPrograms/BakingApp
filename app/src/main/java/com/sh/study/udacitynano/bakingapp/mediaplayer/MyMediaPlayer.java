@@ -145,6 +145,9 @@ public class MyMediaPlayer implements ExoPlayer.EventListener {
      */
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+
+        // TODO: getCurrentPosition()' on a null object reference when I hide app
+
         if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
             mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
                     mPlayer.getCurrentPosition(), 1f);
