@@ -21,7 +21,7 @@ import retrofit2.Response;
  * @version 1.0
  * @since 2018-04-22
  */
-class RecipesViewModel extends ViewModel {
+public class RecipesViewModel extends ViewModel {
     private static final String CLASS_NAME = "RecipesViewModel";
 
     private final MutableLiveData<List<Recipe>> recipes = new MutableLiveData<>();

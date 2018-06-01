@@ -70,11 +70,18 @@ public class MyMediaPlayer implements ExoPlayer.EventListener {
             return false;
     }
 
+    public boolean isPlayerNull() {
+        if (mPlayer != null)
+            return false;
+        else
+            return true;
+    }
+
     public long getPosition() {
         if (mPlayer != null)
             return mPlayer.getCurrentPosition();
         else
-            return 0;
+            return videoPosition;
     }
 
     public String getUri() {
@@ -145,15 +152,10 @@ public class MyMediaPlayer implements ExoPlayer.EventListener {
      */
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
-        // TODO: getCurrentPosition()' on a null object reference when I hide app
-
         if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
-                    mPlayer.getCurrentPosition(), 1f);
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, getPosition(), 1f);
         } else if ((playbackState == ExoPlayer.STATE_READY)) {
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
-                    mPlayer.getCurrentPosition(), 1f);
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, getPosition(), 1f);
         }
         mMediaSession.setPlaybackState(mStateBuilder.build());
     }

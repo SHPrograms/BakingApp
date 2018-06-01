@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
+import com.google.android.exoplayer2.util.Util;
 import com.sh.study.udacitynano.bakingapp.mediaplayer.MyMediaPlayer;
 import com.sh.study.udacitynano.bakingapp.R;
 import com.sh.study.udacitynano.bakingapp.constants.Constants;
@@ -134,6 +135,22 @@ public class StepsFragment extends Fragment implements VideoInterface {
             outState.putBoolean(IS_PLAYING, mediaPlayer.getPlayStatus());
             outState.putLong(VIDEO_POSITION, mediaPlayer.getPosition());
             outState.putString(VIDEO_URI, mediaPlayer.getUri());
+            mediaPlayer.releasePlayer();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23) || (mediaPlayer.isPlayerNull())) {
+            initializePlayer(Uri.parse(mediaPlayer.getUri()), null, mediaPlayer.getPlayStatus(), mediaPlayer.getPosition());
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
             mediaPlayer.releasePlayer();
         }
     }
