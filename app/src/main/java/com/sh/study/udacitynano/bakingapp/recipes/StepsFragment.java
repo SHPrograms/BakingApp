@@ -1,5 +1,6 @@
 package com.sh.study.udacitynano.bakingapp.recipes;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -60,6 +61,7 @@ public class StepsFragment extends Fragment implements VideoInterface {
 
     private Unbinder unbinder;
     private ArrayList<Step> steps;
+    private Boolean twoPane;
 
     private MyMediaPlayer mediaPlayer;
 
@@ -75,6 +77,9 @@ public class StepsFragment extends Fragment implements VideoInterface {
             if (getArguments().containsKey(Constants.RECIPE_STEPS)) {
                 steps = getArguments().getParcelableArrayList(Constants.RECIPE_STEPS);
             }
+            if (getArguments().containsKey(Constants.TWO_PANE)) {
+                twoPane = getArguments().getBoolean(Constants.TWO_PANE);
+            }
         } catch (NullPointerException e) {
             throw new NullPointerException();
         }
@@ -87,7 +92,6 @@ public class StepsFragment extends Fragment implements VideoInterface {
         SHDebug.debugTag(CLASS_NAME, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
         unbinder = ButterKnife.bind(this, view);
-
         stepsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         assert stepsRecyclerView != null;
         StepsAdapter stepsAdapter = new StepsAdapter(this::onClickVideo);
@@ -102,7 +106,9 @@ public class StepsFragment extends Fragment implements VideoInterface {
                     savedInstanceState.getString(VIDEO_IMAGE),
                     savedInstanceState.getBoolean(IS_PLAYING),
                     savedInstanceState.getLong(VIDEO_POSITION));
-            if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if ((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    && (!twoPane)) {
+
                 stepsRecyclerView.setVisibility(View.GONE);
                 stepsHorizontalLine.setGuidelinePercent(1f);
                 if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
@@ -111,7 +117,9 @@ public class StepsFragment extends Fragment implements VideoInterface {
             }
         } else {
             initializePlayer(null, null, false, 0);
-            if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if ((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    && (!twoPane)) {
+
                 stepVideo.setVisibility(View.GONE);
                 stepsHorizontalLine.setGuidelinePercent(0f);
             }
@@ -164,7 +172,9 @@ public class StepsFragment extends Fragment implements VideoInterface {
     @Override
     public void onClickVideo(String urlVideo, String urlImage) {
         initializePlayer(Uri.parse(urlVideo), urlImage, true, 0);
-        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if ((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                && (!twoPane)) {
+
             stepsRecyclerView.setVisibility(View.GONE);
             stepsHorizontalLine.setGuidelinePercent(1f);
             if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {

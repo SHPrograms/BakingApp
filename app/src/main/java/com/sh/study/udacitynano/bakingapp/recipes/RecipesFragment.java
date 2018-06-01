@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -96,7 +97,6 @@ public class RecipesFragment extends Fragment implements RecipesInterface {
 
         if (RecipesPreferences.getRecipePreferences(getActivity()) != null)
             recipesViewModel.setRecipe(RecipesPreferences.getRecipePreferences(getActivity()));
-
         return view;
     }
 
@@ -118,6 +118,7 @@ public class RecipesFragment extends Fragment implements RecipesInterface {
         SHDebug.debugTag(CLASS_NAME, "onClickIngedient");
         recipesViewModel.setRecipe(recipe);
         recipeClickListener.onClickIngedient(recipe);
+//        if (isTwoPane()) onClickStep(recipe);
     }
 
     /**
@@ -131,11 +132,12 @@ public class RecipesFragment extends Fragment implements RecipesInterface {
         SHDebug.debugTag(CLASS_NAME, "onClickStep");
         recipesViewModel.setRecipe(recipe);
         recipeClickListener.onClickStep(recipe);
-        Intent intent = new Intent(this.getContext(), StepsActivity.class);
-        ArrayList<Step> listOfsteps = new ArrayList<>(recipe.getSteps().size());
-        listOfsteps.addAll(recipe.getSteps());
-        intent.putParcelableArrayListExtra(Constants.RECIPE_STEPS, listOfsteps);
-        intent.putExtra(Constants.RECIPE_NAME, recipe.getName());
-        startActivity(intent);
     }
+
+/*
+    private boolean isTwoPane() {
+        return ((getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                && (getActivity().findViewById(R.id.steps_detail_container) != null));
+    }
+*/
 }

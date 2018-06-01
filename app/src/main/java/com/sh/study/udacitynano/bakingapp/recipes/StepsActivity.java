@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
  */
 public class StepsActivity extends AppCompatActivity {
     private static final String CLASS_NAME = "StepsActivity";
+    public boolean twoPane = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +37,8 @@ public class StepsActivity extends AppCompatActivity {
             arguments.putParcelableArrayList(Constants.RECIPE_STEPS,
                     getIntent().getParcelableArrayListExtra(Constants.RECIPE_STEPS)
             );
+            arguments.putBoolean(Constants.TWO_PANE, twoPane);
+            twoPane = getIntent().getBooleanExtra(Constants.TWO_PANE, false);
 
             StepsFragment fragment = new StepsFragment();
             fragment.setArguments(arguments);
